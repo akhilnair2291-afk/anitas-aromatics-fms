@@ -4,6 +4,11 @@
   "version": "1.0.0",
   "description": "Inventory, billing, CRM and vendor PO demo for Anita's Aromatics, built with React, TypeScript and BoardUI.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akhilnair2291-afk/anitas-aromatics-fms.git"
+  },
+  "homepage": "https://github.com/akhilnair2291-afk/anitas-aromatics-fms#readme",
   "type": "module",
   "engines": {
     "node": ">=20.19.0"

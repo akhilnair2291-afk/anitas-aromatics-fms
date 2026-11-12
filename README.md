@@ -46,6 +46,8 @@ See [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for the source requirements a
 ### Run locally
 
 ```bash
+git clone https://github.com/akhilnair2291-afk/anitas-aromatics-fms.git
+cd anitas-aromatics-fms
 npm install
 npm run dev
 ```
