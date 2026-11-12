@@ -495,7 +495,29 @@ function ClaimsTab({ onGenerate }: { onGenerate: () => void }) {
       id: "scheme",
       header: "Scheme",
       align: "end",
-      cell: (claim) => `${claim.schemeRate}% + ${claim.damageRate}%`,
+      cell: (claim) => `${claim.schemeRate}%`,
+    },
+    {
+      id: "damage",
+      header: "Damage",
+      align: "end",
+      cell: (claim) => `${claim.damageRate}%`,
+    },
+    {
+      id: "discount",
+      header: "Addl. discount",
+      align: "end",
+      cell: (claim) => {
+        const rate = claim.discountRate ?? 0;
+        return (
+          <div>
+            <p>{rate}%</p>
+            <p className="text-caption-1-medium text-text-tertiary">
+              {formatMoney((claim.salesValue * rate) / 100)}
+            </p>
+          </div>
+        );
+      },
     },
     { id: "amount", header: "Claim amount", align: "end", cell: (claim) => <span className="font-medium">{formatMoney(claim.amount)}</span> },
     { id: "status", header: "Status", cell: (claim) => <StatusChip status={claim.status} /> },
@@ -529,14 +551,14 @@ function ClaimsTab({ onGenerate }: { onGenerate: () => void }) {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Metric label="Claims pending" value={pending.length} caption="Awaiting review" icon={RiFileList3Line} />
         <Metric label="Approved claims" value={approved.length} caption="Ready to pay" icon={RiCheckLine} />
-        <Metric label="Total claim value" value={formatMoney(total, true)} caption="Current statements" icon={RiMoneyRupeeCircleLine} />
+        <Metric label="Total claim value" value={formatMoney(total, true)} caption="Scheme, damage & discounts" icon={RiMoneyRupeeCircleLine} />
         <Metric label="Sales covered" value={formatMoney(state.claims.reduce((sum, claim) => sum + claim.salesValue, 0), true)} caption="Distributor reported" icon={RiTruckLine} tone="accent" />
       </div>
 
       <Card className="p-4">
         <SectionHeader
           title="Distributor claim statements"
-          description="Scheme and damage rates applied to distributor-reported sales. Statements are generated for review before approval."
+          description="Scheme, damage and additional customer-discount rates applied to distributor-reported sales. Statements are generated for review before approval."
           actions={<Button size="small" leadingIcon={RiAddLine} onClick={onGenerate}>Generate claim</Button>}
         />
         <div className="mt-3 overflow-hidden rounded-2xl bg-background-primary-default">
@@ -545,8 +567,9 @@ function ClaimsTab({ onGenerate }: { onGenerate: () => void }) {
       </Card>
 
       <Callout title="Claim calculation">
-        Claim amount = distributor sales value × (scheme rate + damage allowance). The statement keeps the source
-        sales figure and rates so it can be reconciled against the distributor's own report.
+        Claim amount = distributor sales value × (scheme rate + damage allowance + additional customer discount).
+        The statement keeps the source sales figure and each rate so it can be reconciled against the distributor's
+        own report and discount records.
       </Callout>
     </div>
   );
@@ -559,16 +582,22 @@ function GenerateClaimModal({ open, onClose }: { open: boolean; onClose: () => v
   const [period, setPeriod] = useState("November 2026");
   const [scheme, setScheme] = useState(String(first?.schemeRate ?? 5));
   const [damage, setDamage] = useState(String(first?.damageRate ?? 1));
+  const [discount, setDiscount] = useState(String(first?.discountRate ?? 0));
   const distributor = state.distributors.find((row) => row.locationId === distributorId);
-  const amount = distributor
-    ? (distributor.salesValue * ((Number(scheme) || 0) + (Number(damage) || 0))) / 100
-    : 0;
+  const schemeRate = Number(scheme) || 0;
+  const damageRate = Number(damage) || 0;
+  const discountRate = Number(discount) || 0;
+  const salesValue = distributor?.salesValue ?? 0;
+  const schemeAmount = (salesValue * schemeRate) / 100;
+  const damageAmount = (salesValue * damageRate) / 100;
+  const discountAmount = (salesValue * discountRate) / 100;
+  const amount = schemeAmount + damageAmount + discountAmount;
 
   return (
     <Modal isOpen={open} onOpenChange={(next) => !next && onClose()} size="md">
       <ModalHeader
         title="Generate claim statement"
-        description="Apply the distributor's scheme and damage rates to reported sales for the period."
+        description="Apply the distributor's scheme, damage and additional customer-discount rates to reported sales for the period."
       />
       <ModalBody>
         <div className="flex flex-col gap-3">
@@ -582,6 +611,7 @@ function GenerateClaimModal({ open, onClose }: { open: boolean; onClose: () => v
               if (next) {
                 setScheme(String(next.schemeRate));
                 setDamage(String(next.damageRate));
+                setDiscount(String(next.discountRate ?? 0));
               }
             }}
           >
@@ -592,16 +622,33 @@ function GenerateClaimModal({ open, onClose }: { open: boolean; onClose: () => v
             ))}
           </Select>
           <Input label="Period" value={period} onChange={setPeriod} placeholder="e.g. November 2026" />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Input label="Scheme rate (%)" type="number" value={scheme} onChange={setScheme} />
             <Input label="Damage allowance (%)" type="number" value={damage} onChange={setDamage} />
+            <Input label="Additional discount (%)" type="number" value={discount} onChange={setDiscount} />
           </div>
+          <p className="text-caption-1-medium text-text-tertiary">
+            Additional discount is the extra discount the distributor gave to customers and is claiming back as a
+            reimbursement.
+          </p>
           <div className="rounded-xl bg-background-secondary-default p-3">
             <div className="flex items-center justify-between">
               <span className="text-body-medium text-text-secondary">Reported sales</span>
-              <span className="text-body-medium text-text-primary">{formatMoney(distributor?.salesValue ?? 0)}</span>
+              <span className="text-body-medium text-text-primary">{formatMoney(salesValue)}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t border-separator-border pt-2">
+              <span className="text-body-regular text-text-secondary">Scheme reimbursement</span>
+              <span className="text-body-medium text-text-primary">{formatMoney(schemeAmount)}</span>
             </div>
             <div className="mt-1 flex items-center justify-between">
+              <span className="text-body-regular text-text-secondary">Damage reimbursement</span>
+              <span className="text-body-medium text-text-primary">{formatMoney(damageAmount)}</span>
+            </div>
+            <div className="mt-1 flex items-center justify-between">
+              <span className="text-body-regular text-text-secondary">Additional discount reimbursement</span>
+              <span className="text-body-medium text-text-primary">{formatMoney(discountAmount)}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t border-separator-border pt-2">
               <span className="text-body-medium text-text-secondary">Calculated claim</span>
               <span className="text-title-3-semibold text-text-primary">{formatMoney(amount)}</span>
             </div>
@@ -620,8 +667,9 @@ function GenerateClaimModal({ open, onClose }: { open: boolean; onClose: () => v
               type: "generate-claim",
               distributorId,
               period,
-              schemeRate: Number(scheme) || 0,
-              damageRate: Number(damage) || 0,
+              schemeRate,
+              damageRate,
+              discountRate,
             });
             toast("Claim statement generated", {
               description: `${period} claim for ${distributor?.name} is ready for review.`,

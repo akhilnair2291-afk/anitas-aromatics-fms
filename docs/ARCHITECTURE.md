@@ -72,6 +72,7 @@ interface AppState {
 - **Demo stock lives in an inventory location.** Issuing moves units from warehouse to the demo pool; consuming removes them from the pool; returning moves them back to the warehouse.
 - **Packaging has its own location ledger.** Packaging is not mixed into SKU stock. Office consumption has its own issue records and balance.
 - **Combos are derived, never stored.** Availability is `min(floor(available component qty / component qty))` across components, so shared components cannot be counted twice.
+- **Claims keep each reimbursement component.** A claim stores the distributor sales value plus scheme, damage and additional customer-discount rates separately, so the total can be reconciled and audited.
 
 ## Reducer actions
 
@@ -91,7 +92,7 @@ All writes go through `src/store/AppStore.tsx`:
 | `issue-packaging` | Reduces packaging at a location and records an issue |
 | `add-lead`, `update-lead`, `advance-lead`, `import-instagram` | CRM lead operations |
 | `mark-repeat` | Updates last order date, reorder due date and repeat status |
-| `generate-claim`, `approve-claim` | Creates and approves distributor claim statements |
+| `generate-claim`, `approve-claim` | Creates and approves distributor claim statements covering scheme, damage and additional customer-discount reimbursements |
 | `reset` | Rebuilds the seed state and clears persisted data |
 
 ## Selectors
@@ -110,7 +111,7 @@ Selectors are recomputed during render. The data set is intentionally small, so 
 
 ## Persistence
 
-- Key: `anitas-fms-demo-v1`
+- Key: `anitas-fms-demo-v2`
 - Written after every state change in `AppProvider`.
 - Read once during provider initialisation.
 - If storage is unavailable or corrupt, the app falls back to seed data.

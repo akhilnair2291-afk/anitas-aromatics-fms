@@ -13,7 +13,7 @@ The demo covers consolidated inventory, distributor and demo stock, combo availa
 | Module | Requirements | What the demo shows |
 |---|---|---|
 | **Inventory** | INV-01 … INV-08 | Consolidated SKU × location stock, distributor closing stock, demo issue/consume/return ledger, combo availability, daily dispatch report, packaging by warehouse/production/office, role-based cost visibility |
-| **Billing** | BIL-01 … BIL-03 | Rupyz-style order list, draft proforma invoices built from available stock, shortfall/backorder handling, dispatch that reduces stock immediately, distributor claim statements with approval |
+| **Billing** | BIL-01 … BIL-03 | Rupyz-style order list, draft proforma invoices built from available stock, shortfall/backorder handling, dispatch that reduces stock immediately, distributor claim statements covering scheme, damage and additional customer-discount reimbursements |
 | **CRM** | CRM-01 … CRM-05 | Instagram lead import, lead pipeline stages, offline lead capture, repeat-order tracking, projected sales by salesperson and month |
 | **Vendor POs** | VEN-01 … VEN-06 | PO register, status lifecycle, revised delivery dates, partial receipts, follow-up queue, stock posting only on accepted goods receipt |
 
@@ -77,7 +77,7 @@ The app opens on **Overview**. Use the role switcher in the header and the left 
 5. **Inventory → Packaging** — issue packaging from Mumbai Office and confirm the office balance drops.
 6. **Billing → Orders** — create a draft PI for an order. Available quantity is reserved; a shortfall is shown when stock is insufficient.
 7. **Billing → Draft PIs** — open the PI and dispatch it. Warehouse on-hand and reserved quantities drop, a dispatch movement is written, and the order becomes **Fulfilled**.
-8. **Billing → Claims** — generate a distributor claim statement and approve it.
+8. **Billing → Claims** — generate a distributor claim statement covering scheme, damage and additional customer-discount reimbursements, then approve it.
 9. **CRM → Pipeline** — import an Instagram lead, advance a lead's stage, and add an offline lead.
 10. **CRM → Repeat orders** — mark a customer as reordered and watch the due date move.
 11. **CRM → Forecast** — switch the month and compare projected sales by salesperson.
@@ -98,7 +98,7 @@ Switch roles from the header to demonstrate access control:
 
 ### Resetting the demo
 
-Click **Reset** in the header to restore the seeded sample data. Data persists across reloads in `localStorage` under `anitas-fms-demo-v1`.
+Click **Reset** in the header to restore the seeded sample data. Data persists across reloads in `localStorage` under `anitas-fms-demo-v2`.
 
 More detailed scenarios: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 

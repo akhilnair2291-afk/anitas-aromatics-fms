@@ -386,7 +386,7 @@ function DistributorTab() {
           <Card key={distributor.id} className="p-4">
             <SectionHeader
               title={distributor.name}
-              description={`${distributor.city} · Scheme ${distributor.schemeRate}% + damage ${distributor.damageRate}%`}
+              description={`${distributor.city} · Scheme ${distributor.schemeRate}% · Damage ${distributor.damageRate}% · Addl. discount ${distributor.discountRate ?? 0}%`}
               actions={<StatusChip status={distributor.outstanding > 0 ? "Outstanding" : "Closed"} />}
             />
             <div className="mt-3 flex flex-col gap-2">

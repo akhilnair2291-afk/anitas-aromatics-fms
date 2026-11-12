@@ -107,10 +107,11 @@ Data is seeded relative to today, so due dates, overdue POs, repeat orders and f
 ### BIL-03 — Claim statements
 
 1. Open **Billing → Claims**.
-2. Click **Generate claim**, choose a distributor and period, set scheme and damage rates, and generate the statement.
-3. Approve the new statement.
+2. Click **Generate claim**, choose a distributor and period, and review the scheme, damage and additional customer-discount rates.
+3. Adjust the additional discount if the distributor gave a different discount to customers, then generate the statement.
+4. Approve the new statement.
 
-**Expected:** claim amount = reported sales × (scheme rate + damage allowance), with source values retained for reconciliation.
+**Expected:** claim amount = reported sales × (scheme rate + damage allowance + additional customer discount). The statement shows each reimbursement component separately so discounts can be reconciled against the distributor's records.
 
 ### Dispatch workflow (BIL-01 + INV-05)
 

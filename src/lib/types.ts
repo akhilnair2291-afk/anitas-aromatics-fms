@@ -88,6 +88,8 @@ export interface Distributor {
   returnedQty: number;
   schemeRate: number;
   damageRate: number;
+  /** Additional discount offered by the distributor to customers, reimbursable by the company. */
+  discountRate: number;
   salesValue: number;
 }
 
@@ -206,6 +208,8 @@ export interface Claim {
   salesValue: number;
   schemeRate: number;
   damageRate: number;
+  /** Additional customer discount claimed for reimbursement. */
+  discountRate: number;
   amount: number;
   status: "Pending review" | "Approved";
   generatedOn: string;

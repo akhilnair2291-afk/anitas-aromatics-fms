@@ -40,12 +40,12 @@ Priority: all **High** except VEN-05 (Medium). All items were marked **Not shown
 |---|---|---|---|---|---|
 | BIL-01 | Order to PI | Convert Rupyz sales orders into draft proforma invoices based on available stock | Rupyz orders, stock availability and prices | Draft PI with available quantities | High |
 | BIL-02 | Partial and pending orders | Show shortfall and remaining quantities when stock is insufficient | Order quantities, reserved and available stock | Pending / backorder quantities and follow-up status | High |
-| BIL-03 | Claim statements | Prepare distributor claim statements from applicable schemes and sales | Distributor sales reports, claims, offer rules | Claim statement ready for review | High |
+| BIL-03 | Claim statements | Prepare distributor claim statements from applicable schemes, damage allowances and additional customer discounts | Distributor sales reports, claims, offer rules and additional discount records | Claim statement ready for review | High |
 
 **Acceptance criteria**
 - BIL-01: one click creates a draft PI with only currently available quantities, rates and totals.
 - BIL-02: unavailable quantity is shown as shortfall/backorder; the order remains open until fulfilled.
-- BIL-03: claim amount is calculated from sales value × scheme rate (+ damage allowance) and is reviewable/approvable.
+- BIL-03: claim amount is calculated from sales value × (scheme rate + damage allowance + additional customer discount) and is reviewable/approvable.
 
 **Boundary:** Miracle remains the billing system; the demo creates and approves draft PIs in this app.
 
@@ -112,7 +112,7 @@ A single-page cloud-style demo using sample data, covering a complete cross-modu
 3. Track packaging across warehouse/production/office and issue office packaging (INV-06, INV-07).
 4. Switch roles and search stock with restricted cost visibility (INV-08).
 5. Turn a sales order into a draft PI with available quantity + shortfall (BIL-01, BIL-02), then dispatch it and reduce stock.
-6. Generate a distributor claim statement (BIL-03).
+6. Generate a distributor claim statement covering scheme, damage and additional customer-discount reimbursements (BIL-03).
 7. Import Instagram leads, move them through the pipeline, add offline leads, track repeat orders and view projected sales by salesperson (CRM-01…05).
 8. Record POs, update stages, revise delivery dates, see due/overdue views and follow-up alerts, then receive goods and watch stock increase only on receipt (VEN-01…06).
 

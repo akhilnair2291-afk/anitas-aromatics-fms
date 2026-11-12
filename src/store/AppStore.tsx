@@ -18,7 +18,7 @@ import type {
   Role,
 } from "@/lib/types";
 
-const STORAGE_KEY = "anitas-fms-demo-v1";
+const STORAGE_KEY = "anitas-fms-demo-v2";
 
 export type AppAction =
   | { type: "set-role"; role: Role }
@@ -36,7 +36,7 @@ export type AppAction =
   | { type: "advance-lead"; id: string; stage: LeadStage }
   | { type: "import-instagram" }
   | { type: "mark-repeat"; customerId: string }
-  | { type: "generate-claim"; distributorId: string; period: string; schemeRate: number; damageRate: number }
+  | { type: "generate-claim"; distributorId: string; period: string; schemeRate: number; damageRate: number; discountRate: number }
   | { type: "approve-claim"; claimId: string }
   | { type: "reset" };
 
@@ -508,7 +508,9 @@ function reducer(state: AppState, action: AppAction): AppState {
       );
       if (!distributor) return state;
       const amount =
-        (distributor.salesValue * (action.schemeRate + action.damageRate)) / 100;
+        (distributor.salesValue *
+          (action.schemeRate + action.damageRate + action.discountRate)) /
+        100;
       return {
         ...state,
         claims: [
@@ -519,6 +521,7 @@ function reducer(state: AppState, action: AppAction): AppState {
             salesValue: distributor.salesValue,
             schemeRate: action.schemeRate,
             damageRate: action.damageRate,
+            discountRate: action.discountRate,
             amount,
             status: "Pending review",
             generatedOn: todayISO(),
