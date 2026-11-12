@@ -1,0 +1,39 @@
+{
+  "name": "anitas-aromatics-fms",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Inventory, billing, CRM and vendor PO demo for Anita's Aromatics, built with React, TypeScript and BoardUI.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.12.1",
+    "@remixicon/react": "^4.9.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "motion": "^12.42.2",
+    "react": "^19.3.1",
+    "react-aria-components": "^1.22.1",
+    "react-dom": "^19.3.1",
+    "recharts": "^3.9.2",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.90.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.6"
+  }
+}
